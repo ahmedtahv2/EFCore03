@@ -1,10 +1,16 @@
-﻿namespace EFCore03
+﻿using EFCore03.AppContext;
+
+namespace EFCore03
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //I couldn't figure out how to set the condition of final grade and progress an accept only published
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            using AppDbContext dbContext = new AppDbContext();
         }
     }
 }
