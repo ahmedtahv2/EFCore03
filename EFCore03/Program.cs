@@ -3,6 +3,7 @@ using EFCore03.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using Microsoft.Identity.Client.NativeInterop;
+using System.ComponentModel.DataAnnotations;
 
 namespace EFCore03
 {
@@ -168,6 +169,66 @@ namespace EFCore03
             dbContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
             #endregion
 
+            #region Update Operations
+            #region Change a price
+            var ChangeCoursePrice = await dbContext.Course
+        .FirstOrDefaultAsync(c => c.CourseID == 1);
+            if (ChangeCoursePrice != null)
+                ChangeCoursePrice.Price = 1500m;
+            await dbContext.SaveChangesAsync();
+            #endregion
+
+            #region Update progress
+            var ProgressUpdate = await dbContext.StudentCourse
+        .FirstOrDefaultAsync(c => c.StudentID == 4 && c.CourseID == 4);
+            if (ProgressUpdate != null)
+            {
+                ProgressUpdate.ProgressPercentage = 100;
+                ProgressUpdate.Status = Status.Completed;
+            }
+            await dbContext.SaveChangesAsync();
+            #endregion
+
+            #region PublishCourse
+            var publishCourse = dbContext.Course
+             .Find(1);
+            if (publishCourse != null)
+            {
+                publishCourse.Flag = true;
+                publishCourse.PublishedDate = DateTime.Now;
+            }
+            await dbContext.SaveChangesAsync();
+            #endregion
+            #endregion
+
+            #region Delete Operations
+
+            #region Unenroll
+            var unenroll = dbContext.StudentCourse
+        .Find(4, 4);
+            if (unenroll != null)
+                dbContext.StudentCourse.Remove(unenroll);
+            await dbContext.SaveChangesAsync();
+            #endregion
+
+            #region Delete course
+            var deleteCourse = await dbContext.Course.FindAsync(4);
+            if (deleteCourse != null)
+            {
+                var countBefore = await dbContext.StudentCourse
+                   .CountAsync(c => c.CourseID == 4);
+                Console.WriteLine($"Before Delete: {countBefore}");
+
+                dbContext.Course.Remove(deleteCourse);
+                await dbContext.SaveChangesAsync();
+
+                var countAfter = await dbContext.StudentCourse
+                    .CountAsync(c => c.CourseID == 4);
+                Console.WriteLine($"After Delete: {countAfter}");
+                //because we used restric as a delete behavior
+            }
+            #endregion 
+            #endregion
 
             #endregion
 
