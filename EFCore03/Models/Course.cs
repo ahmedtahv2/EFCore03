@@ -11,7 +11,7 @@ namespace EFCore03.Models
         public string? Descriprion { get; set; }
         public decimal Price { get; set; }
         public Level Level { get; set; }
-        public bool Flag { get; set; }
+        public bool Flag { get; set; }//published or not
         public DateTime? PublishedDate { get; set; }
 
         //instructor Relation 
